@@ -3,33 +3,33 @@
 using namespace Rcpp;
 
 
-// [[Rcpp::export]]
-Rcpp::NumericVector amgsolve(const std::vector<int>    ptr,const std::vector<int>  col,const std::vector<double> val,const std::vector<double> rhs,std::vector<double> guess,double tol=1e-5,int maxiter=100,const std::string coarsening="smoothed_aggregation",const std::string relax="spai0",const std::string solver="bicgstab")
-{
-  Rcpp::NumericVector out;
-  int    iters;
-  double error;
 
-  boost::property_tree::ptree prm;
-  prm.put("precond.coarsening.type",coarsening);
-  prm.put("precond.relax.type",relax);
-  prm.put("solver.type",solver);
-  prm.put("solver.tol",tol);
-  prm.put("solver.maxiter",maxiter);
-  std::size_t n = rhs.size();
-  amgcl::make_solver<
-      amgcl::runtime::amg<Backend>,
-      amgcl::runtime::iterative_solver<Backend>
-      > solve(boost::tie(n, ptr, col, val), prm);
+// Rcpp::NumericVector amgsolve(const std::vector<int>    ptr,const std::vector<int>  col,const std::vector<double> val,const std::vector<double> rhs,std::vector<double> guess,double tol=1e-5,int maxiter=100,const std::string coarsening="smoothed_aggregation",const std::string relax="spai0",const std::string solver="bicgstab")
+// {
+//   Rcpp::NumericVector out;
+//   int    iters;
+//   double error;
+
+//   boost::property_tree::ptree prm;
+//   prm.put("precond.coarsening.type",coarsening);
+//   prm.put("precond.relax.type",relax);
+//   prm.put("solver.type",solver);
+//   prm.put("solver.tol",tol);
+//   prm.put("solver.maxiter",maxiter);
+//   std::size_t n = rhs.size();
+//   amgcl::make_solver<
+//       amgcl::runtime::amg<Backend>,
+//       amgcl::runtime::iterative_solver<Backend>
+//       > solve(boost::tie(n, ptr, col, val), prm);
     
 
-  boost::tie(iters, error) = solve(rhs, guess);
-  out = Rcpp::wrap(guess);
-  out.attr("iter") = iters;
-  out.attr("error") = error;
+//   boost::tie(iters, error) = solve(rhs, guess);
+//   out = Rcpp::wrap(guess);
+//   out.attr("iter") = iters;
+//   out.attr("error") = error;
 
-  return out;
-}
+//   return out;
+// }
 
 
 // Return the preconditioned solver only

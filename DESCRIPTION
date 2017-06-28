@@ -6,9 +6,10 @@ Date: 2017-06-26
 Author: Simon Barthelme
 Maintainer: Simon Barthelme <simon.barthelme@gipsa-lab.fr>
 Description: amgcl by D. Demidov is a library for solving large, sparse linear
-    systems using iterative methods. This package allows you to call amgcl from R.
-License: MIT
+    systems using iterative methods. This package allows you to call amgcl from R
+License: LGPL
 Imports:
+    Rcpp,
     purrr,
     checkmate,
     magrittr

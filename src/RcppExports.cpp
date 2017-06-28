@@ -7,26 +7,6 @@
 
 using namespace Rcpp;
 
-// amgsolve
-Rcpp::NumericVector amgsolve(const std::vector<int> ptr, const std::vector<int> col, const std::vector<double> val, const std::vector<double> rhs, std::vector<double> guess, double tol, int maxiter, const std::string coarsening, const std::string relax, const std::string solver);
-RcppExport SEXP ramgcl_amgsolve(SEXP ptrSEXP, SEXP colSEXP, SEXP valSEXP, SEXP rhsSEXP, SEXP guessSEXP, SEXP tolSEXP, SEXP maxiterSEXP, SEXP coarseningSEXP, SEXP relaxSEXP, SEXP solverSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<int> >::type ptr(ptrSEXP);
-    Rcpp::traits::input_parameter< const std::vector<int> >::type col(colSEXP);
-    Rcpp::traits::input_parameter< const std::vector<double> >::type val(valSEXP);
-    Rcpp::traits::input_parameter< const std::vector<double> >::type rhs(rhsSEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type guess(guessSEXP);
-    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
-    Rcpp::traits::input_parameter< int >::type maxiter(maxiterSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type coarsening(coarseningSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type relax(relaxSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type solver(solverSEXP);
-    rcpp_result_gen = Rcpp::wrap(amgsolve(ptr, col, val, rhs, guess, tol, maxiter, coarsening, relax, solver));
-    return rcpp_result_gen;
-END_RCPP
-}
 // amgsolver
 Rcpp::XPtr<Solver > amgsolver(int n, const std::vector<int> ptr, const std::vector<int> col, const std::vector<double> val, double tol, int maxiter, const std::string coarsening, const std::string relax, const std::string solver);
 RcppExport SEXP ramgcl_amgsolver(SEXP nSEXP, SEXP ptrSEXP, SEXP colSEXP, SEXP valSEXP, SEXP tolSEXP, SEXP maxiterSEXP, SEXP coarseningSEXP, SEXP relaxSEXP, SEXP solverSEXP) {
@@ -100,7 +80,6 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"ramgcl_amgsolve", (DL_FUNC) &ramgcl_amgsolve, 10},
     {"ramgcl_amgsolver", (DL_FUNC) &ramgcl_amgsolver, 9},
     {"ramgcl_solve_newmat", (DL_FUNC) &ramgcl_solve_newmat, 6},
     {"ramgcl_amgsolve_ns", (DL_FUNC) &ramgcl_amgsolve_ns, 13},

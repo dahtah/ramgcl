@@ -13,15 +13,19 @@ psolve(P, b, guess, A)
 \arguments{
 \item{A}{sparse, square matrix (from Matrix package)}
 
-\item{tol}{tolerance}
+\item{tol}{tolerance (default 1e-5)}
 
-\item{maxiter}{maximum number of iterations}
+\item{maxiter}{maximum number of iterations (default 100)}
 
 \item{coarsen}{coarsening method to use (one of the following: ruge_stuben,aggregation,smoothed_aggregation,smoothed_aggr_emin)}
 
 \item{relax}{relaxation to use (one of the following: gauss_seidel,ilu0,iluk,ilut,damped_jacobi,spai0,spai1,chebyshev)}
 
+\item{max_level}{maximum number of levels in the multiscale hierarchy (default 4)}
+
 \item{solver}{which iterative solver to use (cg, idrs, lgmres, gmres, bicgstab,bicgstabl). cg only works on SPD matrices, the rest allow non-symmetric matrices.}
+
+\item{P}{a preconditioner (object of class "amgcl")}
 
 \item{b}{right-hand side (numeric, real)}
 

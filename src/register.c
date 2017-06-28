@@ -8,10 +8,10 @@
 */
 
 /* .Call calls */
-extern SEXP ramgcl_amgsolve(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP ramgcl_amgsolver(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-    {"stencils:_amgsolve",               (DL_FUNC) &ramgcl_amgsolve,               10},
+    {"stencils:_amgsolve",               (DL_FUNC) &ramgcl_amgsolver,               9},
     {NULL, NULL, 0}
 };
 
