@@ -5,8 +5,8 @@ Version: 0.1
 Date: 2017-06-26
 Author: Simon Barthelme
 Maintainer: Simon Barthelme <simon.barthelme@gipsa-lab.fr>
-Description: amgcl by D. Demidov is a library for solving large, sparse linear systems. It is based on the conjugate gradient algorithm with Algebraic Multigrid. 
-License: GPL (>= 2)
+Description: amgcl by D. Demidov is a library for solving large, sparse linear systems using iterative methods. This package allows you to call amgcl from R. 
+License: MIT 
 Imports: Rcpp (>= 0.12.11),
     RcppEigen (>= 0.3.2.9.0),
     purrr
@@ -14,3 +14,8 @@ Depends:
     Matrix,
 LinkingTo: Rcpp, RcppEigen
 RoxygenNote: 6.0.1
+Suggests: knitr,
+    rmarkdown,
+    imager,
+    igraph
+VignetteBuilder: knitr

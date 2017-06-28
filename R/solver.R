@@ -94,6 +94,7 @@ precond <- function(A,tol=1e-5,maxiter=100,coarsen="smoothed_aggregation",relax=
 }
 
 
+#' @export
 print.amgcl <- function(x,...)
 {
     msg <- sprintf("amgcl preconditioner for matrix of size %i \n",x$n)
@@ -128,3 +129,5 @@ psolve <- function(P,b,guess,A)
         solve_newmat(P$xptr,At@p,At@i,At@x,b,guess)
     }
 }
+
+

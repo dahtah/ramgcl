@@ -1,0 +1,84 @@
+---
+title: "Solving large, sparse linear systems using ramgcl"
+author: "Simon Barthelme"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+[amgcl](amgcl.readthedocs.io) by Denis Demidov is a C++ library for solving sparse linear systems using iterative methods. The specific technique used is an Algebraic Multigrid preconditioner, along with various classical solvers like Conjugate Gradients. Although it may not work equally well on all matrices, it is blazingly fast on certain problems like finite difference/finite element systems. 
+
+*ramgcl* is an interface to amgcl. 
+
+# Basic usage
+
+To solve an equation, first set up a preconditioner: 
+
+```{r}
+library(ramgcl)
+#Random sparse, 2x2 matrix
+A <- sparseMatrix(1:2,1:2,x=rnorm(2))
+#Set up a preconditioner
+P <- precond(A)
+P
+```
+
+
+Then call psolve:
+
+```{r}
+b <- rnorm(2)
+psolve(P,b)
+##Checking solution:
+solve(A,b)
+```
+
+The solution comes with two attributes: "iter" is the number of solver iterations that were needed to reach the solution, and "error" is the root mean squared residual, i.e.:
+
+```{r}
+res <- A%*%psolve(P,b) - b
+error <- sqrt(mean(res^2))
+error
+```
+
+# Changing solver/preconditioner parameters
+
+precond takes a number of optional arguments, which allow you to specify both solver parameters and preconditioner parameters. 
+
+```{r}
+##Setting various options
+P <- precond(A,tol=1e-4,solver="cg",maxit=20,coarsen="ruge_stuben")
+```
+
+- tol sets the tolerance (the lower, the more precise the solution, at the cost of more iterations)
+- maxiter sets a max. number of iterations
+- coarsen sets a coarsening method to use (should be one of the following: ruge_stuben,aggregation,smoothed_aggregation,smoothed_aggr_emin). Coarsening is the process of reducing your system to an approximate system of smaller size. 
+- relax sets the relaxation method (should be one of the following: gauss_seidel,ilu0,iluk,ilut,damped_jacobi,spai0,spai1,chebyshev). Relaxation is an approximate inversion used to precondition the system matrix. 
+- solver sets the iterative solver (among cg, idrs, lgmres, gmres, bicgstab,bicgstabl). cg - conjugate gradients - is the most basic and fastest, but only works on SPD matrices. The rest allow non-symmetric matrices. 
+
+# Example: image denoising
+
+```{r message=FALSE,fig.width=5,fig.height=10}
+#Build a sparse diagonal matrix 
+sdiag <- function(v) Diagonal(length(v),v)
+
+library(imager)
+library(igraph)
+im <- load.example("parrots") %>% grayscale
+imn <- im+imnoise(dim=dim(im))*.1
+v <- isoblur(imn,3) %>% imgradient("xy") %>% enorm
+u <- .1*sqrt(1/(.1+v))
+v <- imgradient(imn,"xy") %>% enorm %>% isoblur(2) %>% as.vector
+##Set up a discrete Laplacian
+L <- graph.lattice(dimvector=dim(im)[1:2]) %>% laplacian_matrix
+##Set up a system matrix
+M <- sdiag(u)%*%L%*%sdiag(u)+.03*sdiag(rep(1,nrow(L)))
+im.dn <- precond(M) %>% psolve(as.vector(imn)) %>% as.cimg(dim=dim(im))
+layout(1:2)
+plot(imn,main="Noisy image",axes=FALSE)
+plot(im.dn,main="Denoised image",axes=FALSE)
+
+```
