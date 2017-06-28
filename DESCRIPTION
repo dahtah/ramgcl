@@ -1,20 +1,23 @@
 Package: ramgcl
 Type: Package
-Title: Iteratively solve large linear systems using the amgcl library. 
+Title: Iteratively solve large linear systems using the amgcl library.
 Version: 0.1
 Date: 2017-06-26
 Author: Simon Barthelme
 Maintainer: Simon Barthelme <simon.barthelme@gipsa-lab.fr>
-Description: amgcl by D. Demidov is a library for solving large, sparse linear systems using iterative methods. This package allows you to call amgcl from R. 
-License: MIT 
-Imports: Rcpp (>= 0.12.11),
-    RcppEigen (>= 0.3.2.9.0),
-    purrr
+Description: amgcl by D. Demidov is a library for solving large, sparse linear
+    systems using iterative methods. This package allows you to call amgcl from R.
+License: MIT
+Imports:
+    purrr,
+    checkmate,
+    magrittr
 Depends:
     Matrix,
 LinkingTo: Rcpp, RcppEigen
-RoxygenNote: 6.0.1
-Suggests: knitr,
+RoxygenNote: 5.0.1
+Suggests:
+    knitr,
     rmarkdown,
     imager,
     igraph
