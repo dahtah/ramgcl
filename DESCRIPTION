@@ -15,7 +15,7 @@ Imports:
     magrittr
 Depends:
     Matrix,
-LinkingTo: Rcpp, RcppEigen
+LinkingTo: Rcpp, RcppEigen, BH
 RoxygenNote: 5.0.1
 Suggests:
     knitr,
