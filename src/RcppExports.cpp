@@ -78,3 +78,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_ramgcl_amgsolver", (DL_FUNC) &_ramgcl_amgsolver, 9},
+    {"_ramgcl_solve_newmat", (DL_FUNC) &_ramgcl_solve_newmat, 6},
+    {"_ramgcl_amgsolve_ns", (DL_FUNC) &_ramgcl_amgsolve_ns, 13},
+    {"_ramgcl_solve_rhs", (DL_FUNC) &_ramgcl_solve_rhs, 3},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_ramgcl(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}
