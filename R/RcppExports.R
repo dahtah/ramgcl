@@ -2,18 +2,18 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 amgsolver <- function(n, ptr, col, val, tol = 1e-5, maxiter = 100L, coarsening = "smoothed_aggregation", relax = "spai0", solver = "bicgstab") {
-    .Call('ramgcl_amgsolver', PACKAGE = 'ramgcl', n, ptr, col, val, tol, maxiter, coarsening, relax, solver)
+    .Call('_ramgcl_amgsolver', PACKAGE = 'ramgcl', n, ptr, col, val, tol, maxiter, coarsening, relax, solver)
 }
 
 solve_newmat <- function(solve, ptr, col, val, rhs, guess) {
-    .Call('ramgcl_solve_newmat', PACKAGE = 'ramgcl', solve, ptr, col, val, rhs, guess)
+    .Call('_ramgcl_solve_newmat', PACKAGE = 'ramgcl', solve, ptr, col, val, rhs, guess)
 }
 
 amgsolve_ns <- function(ptr, col, val, rhs, guess, nS, tol = 1e-5, maxiter = 100L, coarsening = "smoothed_aggregation", relax = "spai0", solver = "bicgstab", max_levels = 4L, coarse_enough = 1L) {
-    .Call('ramgcl_amgsolve_ns', PACKAGE = 'ramgcl', ptr, col, val, rhs, guess, nS, tol, maxiter, coarsening, relax, solver, max_levels, coarse_enough)
+    .Call('_ramgcl_amgsolve_ns', PACKAGE = 'ramgcl', ptr, col, val, rhs, guess, nS, tol, maxiter, coarsening, relax, solver, max_levels, coarse_enough)
 }
 
 solve_rhs <- function(solve, rhs, guess) {
-    .Call('ramgcl_solve_rhs', PACKAGE = 'ramgcl', solve, rhs, guess)
+    .Call('_ramgcl_solve_rhs', PACKAGE = 'ramgcl', solve, rhs, guess)
 }
 
