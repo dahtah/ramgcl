@@ -1,3 +1,4 @@
+#include <RcppEigen.h>
 #include <amgcl/make_solver.hpp>
 #include <amgcl/solver/bicgstab.hpp>
 #include <amgcl/amg.hpp>
@@ -5,7 +6,6 @@
 #include <amgcl/relaxation/spai0.hpp>
 #include <amgcl/adapter/crs_tuple.hpp>
 #include <amgcl/adapter/zero_copy.hpp>
-#include <RcppEigen.h>
 #include <vector>
 #include <amgcl/runtime.hpp>
 
