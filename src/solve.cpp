@@ -132,6 +132,15 @@ Rcpp::NumericVector solve_rhs(Rcpp::XPtr< Solver> solve,const std::vector<double
   return out;
 }
 
+// [[Rcpp::export]]
+Rcpp::NumericVector run_precond(Rcpp::XPtr< Solver> solve,const std::vector<double> rhs)
+{
+  std::vector<double> out(rhs.size());
+  int    iters;
+  double error;
+  (*solve).precond().apply(rhs, out);
+  return wrap(out);
+}
 
 
 

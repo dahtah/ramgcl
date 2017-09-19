@@ -9,7 +9,7 @@ using namespace Rcpp;
 
 // amgsolver
 Rcpp::XPtr<Solver > amgsolver(int n, const std::vector<int> ptr, const std::vector<int> col, const std::vector<double> val, double tol, int maxiter, const std::string coarsening, const std::string relax, const std::string solver);
-RcppExport SEXP ramgcl_amgsolver(SEXP nSEXP, SEXP ptrSEXP, SEXP colSEXP, SEXP valSEXP, SEXP tolSEXP, SEXP maxiterSEXP, SEXP coarseningSEXP, SEXP relaxSEXP, SEXP solverSEXP) {
+RcppExport SEXP _ramgcl_amgsolver(SEXP nSEXP, SEXP ptrSEXP, SEXP colSEXP, SEXP valSEXP, SEXP tolSEXP, SEXP maxiterSEXP, SEXP coarseningSEXP, SEXP relaxSEXP, SEXP solverSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -28,7 +28,7 @@ END_RCPP
 }
 // solve_newmat
 Rcpp::NumericVector solve_newmat(Rcpp::XPtr< Solver> solve, const std::vector<int> ptr, const std::vector<int> col, const std::vector<double> val, const std::vector<double> rhs, std::vector<double> guess);
-RcppExport SEXP ramgcl_solve_newmat(SEXP solveSEXP, SEXP ptrSEXP, SEXP colSEXP, SEXP valSEXP, SEXP rhsSEXP, SEXP guessSEXP) {
+RcppExport SEXP _ramgcl_solve_newmat(SEXP solveSEXP, SEXP ptrSEXP, SEXP colSEXP, SEXP valSEXP, SEXP rhsSEXP, SEXP guessSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -44,7 +44,7 @@ END_RCPP
 }
 // amgsolve_ns
 Rcpp::NumericVector amgsolve_ns(const std::vector<int> ptr, const std::vector<int> col, const std::vector<double> val, const std::vector<double> rhs, std::vector<double> guess, Rcpp::NumericMatrix nS, double tol, int maxiter, const std::string coarsening, const std::string relax, const std::string solver, int max_levels, int coarse_enough);
-RcppExport SEXP ramgcl_amgsolve_ns(SEXP ptrSEXP, SEXP colSEXP, SEXP valSEXP, SEXP rhsSEXP, SEXP guessSEXP, SEXP nSSEXP, SEXP tolSEXP, SEXP maxiterSEXP, SEXP coarseningSEXP, SEXP relaxSEXP, SEXP solverSEXP, SEXP max_levelsSEXP, SEXP coarse_enoughSEXP) {
+RcppExport SEXP _ramgcl_amgsolve_ns(SEXP ptrSEXP, SEXP colSEXP, SEXP valSEXP, SEXP rhsSEXP, SEXP guessSEXP, SEXP nSSEXP, SEXP tolSEXP, SEXP maxiterSEXP, SEXP coarseningSEXP, SEXP relaxSEXP, SEXP solverSEXP, SEXP max_levelsSEXP, SEXP coarse_enoughSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -67,7 +67,7 @@ END_RCPP
 }
 // solve_rhs
 Rcpp::NumericVector solve_rhs(Rcpp::XPtr< Solver> solve, const std::vector<double> rhs, std::vector<double> guess);
-RcppExport SEXP ramgcl_solve_rhs(SEXP solveSEXP, SEXP rhsSEXP, SEXP guessSEXP) {
+RcppExport SEXP _ramgcl_solve_rhs(SEXP solveSEXP, SEXP rhsSEXP, SEXP guessSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -78,12 +78,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// run_precond
+Rcpp::NumericVector run_precond(Rcpp::XPtr< Solver> solve, const std::vector<double> rhs);
+RcppExport SEXP _ramgcl_run_precond(SEXP solveSEXP, SEXP rhsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr< Solver> >::type solve(solveSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double> >::type rhs(rhsSEXP);
+    rcpp_result_gen = Rcpp::wrap(run_precond(solve, rhs));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"ramgcl_amgsolver", (DL_FUNC) &ramgcl_amgsolver, 9},
-    {"ramgcl_solve_newmat", (DL_FUNC) &ramgcl_solve_newmat, 6},
-    {"ramgcl_amgsolve_ns", (DL_FUNC) &ramgcl_amgsolve_ns, 13},
-    {"ramgcl_solve_rhs", (DL_FUNC) &ramgcl_solve_rhs, 3},
+    {"_ramgcl_amgsolver", (DL_FUNC) &_ramgcl_amgsolver, 9},
+    {"_ramgcl_solve_newmat", (DL_FUNC) &_ramgcl_solve_newmat, 6},
+    {"_ramgcl_amgsolve_ns", (DL_FUNC) &_ramgcl_amgsolve_ns, 13},
+    {"_ramgcl_solve_rhs", (DL_FUNC) &_ramgcl_solve_rhs, 3},
+    {"_ramgcl_run_precond", (DL_FUNC) &_ramgcl_run_precond, 2},
     {NULL, NULL, 0}
 };
 
