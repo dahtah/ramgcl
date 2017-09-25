@@ -131,11 +131,11 @@ void precondition(communicator comm, const Condition &cond, const Message &messa
         std::vector<int> c(comm.size);
         MPI_Gather(&lc, 1, MPI_INT, &c[0], comm.size, MPI_INT, 0, comm);
         if (comm.rank == 0) {
-            std::cerr << "Failed assumption: " << message << std::endl;
-            std::cerr << "Offending processes:";
+            Rcpp::Rcout << "Failed assumption: " << message << std::endl;
+            Rcpp::Rcout << "Offending processes:";
             for (int i = 0; i < comm.size; ++i)
-                if (!c[i]) std::cerr << " " << i;
-            std::cerr << std::endl;
+                if (!c[i]) Rcpp::Rcout << " " << i;
+            Rcpp::Rcout << std::endl;
         }
         MPI_Barrier(comm);
         throw std::runtime_error(message);

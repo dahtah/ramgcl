@@ -105,7 +105,7 @@ void precondition(const Condition &condition, const Message &message) {
 // Unknown parameter action
 #ifndef AMGCL_PARAM_UNKNOWN
 #  define AMGCL_PARAM_UNKNOWN(name)                                            \
-      std::cerr << "AMGCL WARNING: unknown parameter " << name << std::endl
+      Rcpp::Rcout << "AMGCL WARNING: unknown parameter " << name << std::endl
 #endif
 
 # define AMGCL_PARAMS_CHECK_LOOP(z, p, name)                                   \

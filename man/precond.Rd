@@ -44,6 +44,7 @@ You can change the system matrix when running psolve (using the optional A argum
 \itemize{
 \item \code{psolve}: solve a preconditioned system
 }}
+
 \examples{
 A <- sparseMatrix(1:2,1:2,x=rnorm(2))
 b <- rnorm(2)
@@ -57,4 +58,3 @@ solve(A,b)
 \author{
 Simon Barthelme
 }
-

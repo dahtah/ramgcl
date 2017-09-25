@@ -17,7 +17,7 @@ solve_rhs <- function(solve, rhs, guess) {
     .Call('_ramgcl_solve_rhs', PACKAGE = 'ramgcl', solve, rhs, guess)
 }
 
-run_precond <- function(solve, rhs) {
-    .Call('_ramgcl_run_precond', PACKAGE = 'ramgcl', solve, rhs)
+run_precond_ <- function(solve, rhs) {
+    .Call('_ramgcl_run_precond_', PACKAGE = 'ramgcl', solve, rhs)
 }
 

@@ -78,15 +78,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// run_precond
-Rcpp::NumericVector run_precond(Rcpp::XPtr< Solver> solve, const std::vector<double> rhs);
-RcppExport SEXP _ramgcl_run_precond(SEXP solveSEXP, SEXP rhsSEXP) {
+// run_precond_
+Rcpp::NumericVector run_precond_(Rcpp::XPtr< Solver> solve, const std::vector<double> rhs);
+RcppExport SEXP _ramgcl_run_precond_(SEXP solveSEXP, SEXP rhsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr< Solver> >::type solve(solveSEXP);
     Rcpp::traits::input_parameter< const std::vector<double> >::type rhs(rhsSEXP);
-    rcpp_result_gen = Rcpp::wrap(run_precond(solve, rhs));
+    rcpp_result_gen = Rcpp::wrap(run_precond_(solve, rhs));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -96,7 +96,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_ramgcl_solve_newmat", (DL_FUNC) &_ramgcl_solve_newmat, 6},
     {"_ramgcl_amgsolve_ns", (DL_FUNC) &_ramgcl_amgsolve_ns, 13},
     {"_ramgcl_solve_rhs", (DL_FUNC) &_ramgcl_solve_rhs, 3},
-    {"_ramgcl_run_precond", (DL_FUNC) &_ramgcl_run_precond, 2},
+    {"_ramgcl_run_precond_", (DL_FUNC) &_ramgcl_run_precond_, 2},
     {NULL, NULL, 0}
 };
 

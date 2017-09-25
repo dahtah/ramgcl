@@ -59,16 +59,65 @@ P <- precond(A,tol=1e-4,solver="cg",maxit=20,coarsen="ruge_stuben")
 - relax sets the relaxation method (should be one of the following: gauss_seidel,ilu0,iluk,ilut,damped_jacobi,spai0,spai1,chebyshev). Relaxation is an approximate inversion used to precondition the system matrix. 
 - solver sets the iterative solver (among cg, idrs, lgmres, gmres, bicgstab,bicgstabl). cg - conjugate gradients - is the most basic and fastest, but only works on SPD matrices. The rest allow non-symmetric matrices. 
 
-# Example: image denoising
+# Example: from the heat equation to denoising
+
+The Heat Equation is a Partial Differential Equation that reads:
+
+$$ \frac{\partial}{\partial t} f = \Delta f $$ 
+
+where $ f(x,t) $ is a function of time and space, and $\Delta$ is the Laplace operator. In physics, it describes how heat diffuses through a homogeneous medium. In signal processing, it describes Gaussian blur: the solution at time $t$ of the heat equation is the initial value $f(x,0)$ convolved with a Gaussian kernel. 
+
+To solve the heat equation numerically we discretise $f$ in both time and space. To represent the Laplace operator, we use finite differences, which for regular grids is equivalent to the graph Laplacian: 
+
+```{r}
+#Let's solve the 1D heat equation 
+n <- 100 #Number of grid points in space
+library(igraph)
+L <- graph.lattice(n) %>% laplacian_matrix %>% { - . }
+#The famous [1,-2,1] stencil
+L[1:10,1:10]
+```
+
+Next, the most stable scheme for the time discretisation is an [implicit Euler scheme](https://en.wikipedia.org/wiki/Backward_Euler_method). We use:
+
+$$ f(x,t+\tau) - \tau \Delta f(x,t+\tau) = f(x,t) $$  
+
+and solve for the next value $f(x,t+\tau)$ given the current one $f(x,t)$. In discrete space this means solving a linear equation, as in the code below: 
+
+```{r}
+tau <- .3
+P <- precond(Diagonal(n)-tau*L)
+step <- function(f) psolve(P,f)
+##The spatial grid
+xg <- seq(0,1,l=n)
+f0 <- xg > .45 & xg < .55
+
+plot(xg,f0,type="l",xlab="x",ylab="f(x,t)")
+f1 <- step(f0)
+#After one iteration
+lines(xg,f1,lty=2,col="lightblue")
+f <- f1
+for (ind in 1:30) { f <- step(f) }
+#After 30 more
+lines(xg,f,lty=3,col="blue")
+#After 130 more
+for (ind in 1:100) { f <- step(f) }
+lines(xg,f,lty=4,col="darkblue")
+```
+
+The heat equation smoothes the initial step-like profile into a Gaussian-looking blob. 
+
+In image denoising the usual problem is to remove the noise while keeping important image structures intact, e.g. sharp edges. A simple Gaussian blur removes the noise but also tends to smooth away the edges. The Perona-Malik diffusion is a variant of the heat equation that preserves edges by limiting the diffusion around edges. The following is a simpler variant, where we scale the Laplacian symmetrically to limit diffusion in areas where the image gradient is strong: 
 
 ```{r message=FALSE,fig.width=5,fig.height=10}
-#Build a sparse diagonal matrix 
-sdiag <- function(v) Diagonal(length(v),v)
+#Build a sparse diagonal matrix (shortcut)
+sdiag <- function(v) Diagonal(x=v)
 
 library(imager)
-library(igraph)
 im <- load.example("parrots") %>% grayscale
+#Noisy image
 imn <- im+imnoise(dim=dim(im))*.1
+#Estimate gradient magnitude
 v <- isoblur(imn,3) %>% imgradient("xy") %>% enorm
 u <- .1*sqrt(1/(.1+v))
 v <- imgradient(imn,"xy") %>% enorm %>% isoblur(2) %>% as.vector
@@ -76,9 +125,12 @@ v <- imgradient(imn,"xy") %>% enorm %>% isoblur(2) %>% as.vector
 L <- graph.lattice(dimvector=dim(im)[1:2]) %>% laplacian_matrix
 ##Set up a system matrix
 M <- sdiag(u)%*%L%*%sdiag(u)+.03*sdiag(rep(1,nrow(L)))
+P <- precond(M)
 im.dn <- precond(M) %>% psolve(as.vector(imn)) %>% as.cimg(dim=dim(im))
 layout(1:2)
 plot(imn,main="Noisy image",axes=FALSE)
 plot(im.dn,main="Denoised image",axes=FALSE)
 
 ```
+
+Here amgcl really shines: it solves a linear system involving ~ 400,000 variables in less then half a second, preconditioning included. It's about 7-8 times faster than a supernodal Cholesky, and the larger the image, the greater the gap. 

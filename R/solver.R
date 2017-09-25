@@ -110,12 +110,12 @@ print.amgcl <- function(x,...)
 psolve <- function(P,b,guess,A)
 {
     assertClass(P,"amgcl")
-    assertAtomic(b,len=P$n)
+    assertNumeric(b,len=P$n)
     if (missing(guess))
     {
         guess <- 0*b
     }
-    assertAtomic(guess,len=P$n)
+    assertNumeric(guess,len=P$n)
     if (missing(A))
     {
         solve_rhs(P$xptr,b,guess)
@@ -132,4 +132,21 @@ psolve <- function(P,b,guess,A)
     }
 }
 
-
+##' Run AMG preconditioner on vector
+##'
+##' Unlike psolve, which solves a linear system (up to a certain tolerance), this function just runs the AMG preconditioner on a vector.
+##' You can think of the preconditioner as a fast approximate matrix inverse. In a few cases it is an exact inverse, for example in the case of a Laplacian on a lattice. 
+##' @param P an amgcl preconditioner object
+##' @param b vector to run through preconditioner 
+##' @return the product P*b
+##' @examples
+##' 
+##' @author Simon Barthelme
+##' @export
+amg <- function(P,b)
+{
+    assertClass(P,"amgcl")
+    assertNumeric(b,len=P$n)
+    run_precond_(P$xptr,b)
+}
+    
